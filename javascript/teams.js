@@ -1,10 +1,11 @@
 // ELEMENTS
 const teamListEl = document.getElementById("teamList");
 
-// GLOBAL VARIABLES
-let NFLteams;
-let teams;
+// TEAM LISTS
+let NFLteams; // list of NFL teams
+let teamList; // visible team list
 
+// this function runs each time a league is selected on the dropdown menu
 async function show(league) {
   console.log(league);
   switch (league) {
@@ -17,16 +18,16 @@ async function show(league) {
       break;
 
     case "NFL":
+      console.log("football");
       // only call API if NFLteams not loaded previously
       if (!NFLteams) {
-        console.log("football");
         const response = await fetch(
           "http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
         );
         const teamsObj = await response.json();
         NFLteams = teamsObj.sports[0].leagues[0].teams;
-        teams = NFLteams;
       }
+      teamList = NFLteams;
       break;
 
     case "NHL":
@@ -40,7 +41,7 @@ async function show(league) {
 
   // NFL TEAMS WORK HERE
   // create list of teams
-  teams.forEach((team) => {
+  teamList.forEach((team) => {
     // create checkbox with team logo and team name
 
     // parent form-check
@@ -53,12 +54,17 @@ async function show(league) {
     checkbox.type = "checkbox";
     checkbox.value = "";
     checkbox.id = team.team.uid;
+    checkbox.checked = localStorage.getItem(team.team.uid);
     formCheck.appendChild(checkbox);
     checkbox.addEventListener("change", () => {
-      console.log(checkbox.id, checkbox.checked)
-    })
+      console.log(checkbox.id, checkbox.checked);
+      checkbox.checked
+        ? localStorage.setItem(team.team.uid, checkbox.checked)
+        : localStorage.removeItem(team.team.uid);
+      // localStorage.setItem(team.team.uid, checkbox.checked);
+    });
 
-    console.log(team.team.uid)
+    console.log(team.team.uid, Boolean(localStorage.getItem(team.team.uid)));
 
     // label: (logo) team name
     const teamLabel = document.createElement("label");
