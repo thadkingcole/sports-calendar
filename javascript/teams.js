@@ -52,18 +52,23 @@ async function show(league) {
     checkbox.className = "form-check-input";
     checkbox.type = "checkbox";
     checkbox.value = "";
-    checkbox.id = team.team.abbreviation;
+    checkbox.id = team.team.uid;
     formCheck.appendChild(checkbox);
+    checkbox.addEventListener("change", () => {
+      console.log(checkbox.id, checkbox.checked)
+    })
+
+    console.log(team.team.uid)
 
     // label: (logo) team name
     const teamLabel = document.createElement("label");
     teamLabel.className = "form-check-label";
-    teamLabel.for = team.team.abbreviation;
+    teamLabel.for = team.team.uid;
 
     // make team logo
     const logoImg = document.createElement("img");
     logoImg.src = team.team.logos[0].href;
-    logoImg.alt = team.team.abbreviation;
+    logoImg.alt = team.team.uid;
     logoImg.width = "20";
     logoImg.className = "me-1";
 
