@@ -61,10 +61,7 @@ async function show(league) {
       checkbox.checked
         ? localStorage.setItem(team.team.uid, checkbox.checked)
         : localStorage.removeItem(team.team.uid);
-      // localStorage.setItem(team.team.uid, checkbox.checked);
     });
-
-    console.log(team.team.uid, Boolean(localStorage.getItem(team.team.uid)));
 
     // label: (logo) team name
     const teamLabel = document.createElement("label");
