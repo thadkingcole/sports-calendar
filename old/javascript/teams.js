@@ -1,3 +1,5 @@
+// TODO convert to react to use state management
+
 // ELEMENTS
 const teamListEl = document.getElementById("teamList");
 
@@ -5,8 +7,19 @@ const teamListEl = document.getElementById("teamList");
 let NFLteams; // list of NFL teams
 let teamList; // visible team list
 
+// MAIN
+showGames();
+
+async function showGames() {
+  const response = await fetch(
+    "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams?limit=32"
+  );
+  const resJson = await response.json();
+  console.log(resJson.items);
+}
+
 // this function runs each time a league is selected on the dropdown menu
-async function show(league) {
+async function showTeams(league) {
   console.log(league);
   switch (league) {
     case "MLB":
