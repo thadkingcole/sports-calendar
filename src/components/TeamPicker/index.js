@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -6,13 +6,25 @@ import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
 function TeamPicker() {
+  // STATE VARIABLES
   const [showCanvas, setShowCanvas] = useState(false);
-  const [teams, setTeams] = useState([]);
+  const [teamList, setTeamList] = useState([]);
+  const [pickedTeams, setPickedTeams] = useState(() =>
+    // initialize with localStorage
+    JSON.parse(localStorage.getItem("pickedTeams"))
+  );
 
-  const handleCloseCanvas = () => setShowCanvas(false);
+  // update localStorage with each update to pickedTeams
+  useEffect(() => {
+    localStorage.setItem("pickedTeams", JSON.stringify(pickedTeams));
+  }, [pickedTeams]);
+
+  // handler functions
   const handleShowCanvas = () => setShowCanvas(true);
+  const handleCloseCanvas = () => setShowCanvas(false);
   const handleLeagueClick = (e) => showTeams(e.target.text.toLowerCase());
 
+  // helper functions
   async function showTeams(league) {
     const leagues = {
       mlb: "baseball",
@@ -24,8 +36,7 @@ function TeamPicker() {
     const res = await fetch(url);
     const data = await res.json();
     const { teams } = data.sports[0].leagues[0];
-    console.log(teams);
-    setTeams(teams);
+    setTeamList(teams);
   }
 
   return (
@@ -59,10 +70,28 @@ function TeamPicker() {
             <Dropdown.Item onClick={handleLeagueClick}>NHL</Dropdown.Item>
           </DropdownButton>
           <Form>
-            {teams.map((team) => {
+            {teamList.map((team) => {
               return (
                 <Form.Check key={team.team.uid}>
-                  <Form.Check.Input type="checkbox"></Form.Check.Input>
+                  <Form.Check.Input
+                    type="checkbox"
+                    checked={Boolean(pickedTeams[team.team.uid])}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setPickedTeams((prev) => ({
+                          ...prev,
+                          [team.team.uid]: team.team.displayName,
+                        }));
+                      } else {
+                        setPickedTeams((current) => {
+                          const copy = { ...current };
+                          delete copy[team.team.uid];
+                          return copy;
+                        });
+                      }
+                    }}
+                    value={team.team.uid}
+                  ></Form.Check.Input>
                   <Form.Check.Label>
                     <img
                       src={team.team.logos[0].href}
