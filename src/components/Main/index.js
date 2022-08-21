@@ -7,18 +7,29 @@ function Main({ myTeams }) {
     const eventsRes = await fetch(url);
     const events = await eventsRes.json();
     // specific game info
-    const gameRes = await fetch(events.items[0].$ref);
-    const game = await gameRes.json();
-    // game situation
-    const sitRes = await fetch(game.competitions[0].situation.$ref);
-    const sit = await sitRes.json();
-    // last play
-    const lpRes = await fetch(sit.lastPlay.$ref);
-    const lp = await lpRes.json();
-    // status
-    const statusRes = await fetch(game.competitions[0].status.$ref);
-    const status = await statusRes.json();
-    console.log(game.date, lp.awayScore, game.name, lp.homeScore, status.type.shortDetail)
+    events.items.map(async (event) => {
+      const gameRes = await fetch(event.$ref);
+      const game = await gameRes.json();
+      // game situation (doesn't exist if game hasn't happened yet)
+      // TODO don't drill into $ref if no situation...
+      // TODO error catching is needed here
+      const sitRes = await fetch(game.competitions[0].situation.$ref);
+      const sit = await sitRes.json();
+      // last play
+      const lpRes = await fetch(sit.lastPlay.$ref);
+      const lp = await lpRes.json();
+      // status
+      const statusRes = await fetch(game.competitions[0].status.$ref);
+      const status = await statusRes.json();
+      // print to console.log (for now)
+      console.log(
+        game.date,
+        lp.awayScore,
+        game.name,
+        lp.homeScore,
+        status.type.shortDetail
+      );
+    });
   }
   // console.log(Object.keys(myTeams).pop())
   return (
