@@ -1,39 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Stack from "react-bootstrap/Stack";
+import LEAGUES from "../../constants";
 
-function TeamPicker() {
+function TeamPicker({ changeMyTeams, myTeams }) {
   // STATE VARIABLES
   const [showCanvas, setShowCanvas] = useState(false);
+  const [league, setLeague] = useState("");
   const [teamList, setTeamList] = useState([]);
-  const [pickedTeams, setPickedTeams] = useState(() => {
-    // initialize with localStorage OR empty object
-    return JSON.parse(localStorage.getItem("pickedTeams")) || {};
-  });
 
-  // update localStorage with each update to pickedTeams
-  useEffect(() => {
-    localStorage.setItem("pickedTeams", JSON.stringify(pickedTeams));
-  }, [pickedTeams]);
-
-  // handler functions
+  // HANDLER FUNCTIONS
   const handleShowCanvas = () => setShowCanvas(true);
   const handleCloseCanvas = () => setShowCanvas(false);
   const handleLeagueClick = (e) => showTeams(e.target.text.toLowerCase());
+  const handleCheck = (e) => changeMyTeams(e.target);
 
-  // helper functions
-  async function showTeams(league) {
-    const leagues = {
-      mlb: "baseball",
-      nba: "basketball",
-      nfl: "football",
-      nhl: "hockey",
-    };
-    const url = `http://site.api.espn.com/apis/site/v2/sports/${leagues[league]}/${league}/teams`;
+  // HELPER FUNCTIONS
+  async function showTeams(selectedLeague) {
+    setLeague(selectedLeague);
+    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[selectedLeague]}/${selectedLeague}/teams`;
     const res = await fetch(url);
     const data = await res.json();
     const { teams } = data.sports[0].leagues[0];
@@ -74,22 +63,10 @@ function TeamPicker() {
                 <Form.Check key={team.team.uid}>
                   <Form.Check.Input
                     type="checkbox"
-                    checked={Boolean(pickedTeams[team.team.uid])}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setPickedTeams((prev) => ({
-                          ...prev,
-                          [team.team.uid]: team.team.displayName,
-                        }));
-                      } else {
-                        setPickedTeams((current) => {
-                          const copy = { ...current };
-                          delete copy[team.team.uid];
-                          return copy;
-                        });
-                      }
-                    }}
-                    value={team.team.uid}
+                    checked={Boolean(myTeams[team.team.uid])}
+                    onChange={handleCheck}
+                    id={team.team.uid}
+                    value={league}
                   ></Form.Check.Input>
                   <Form.Check.Label>
                     <img
