@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Top from "./components/Top";
 import TeamPicker from "./components/TeamPicker";
-import Main from "./components/Main";
+import Games from "./components/Games";
 
 function App() {
   // STATE VARIABLES
@@ -31,7 +31,7 @@ function App() {
     <div className="App">
       <Top />
       <TeamPicker changeMyTeams={changeMyTeams} myTeams={myTeams} />
-      <Main myTeams={myTeams} />
+      <Games myTeams={myTeams} />
     </div>
   );
 }
