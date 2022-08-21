@@ -4,15 +4,16 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import Stack from "react-bootstrap/Stack";
 
 function TeamPicker() {
   // STATE VARIABLES
   const [showCanvas, setShowCanvas] = useState(false);
   const [teamList, setTeamList] = useState([]);
-  const [pickedTeams, setPickedTeams] = useState(() =>
-    // initialize with localStorage
-    JSON.parse(localStorage.getItem("pickedTeams"))
-  );
+  const [pickedTeams, setPickedTeams] = useState(() => {
+    // initialize with localStorage OR empty object
+    return JSON.parse(localStorage.getItem("pickedTeams")) || {};
+  });
 
   // update localStorage with each update to pickedTeams
   useEffect(() => {
@@ -40,7 +41,7 @@ function TeamPicker() {
   }
 
   return (
-    <div className="bg-primary">
+    <div className="bg-secondary">
       <Button variant="primary" onClick={handleShowCanvas}>
         Pick Teams
       </Button>
@@ -49,26 +50,24 @@ function TeamPicker() {
         show={showCanvas}
         onHide={handleCloseCanvas}
       >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Pick teams to add to the calendar:</Offcanvas.Title>
+        <Offcanvas.Header closeButton closeVariant="white">
+          <Stack gap={2}>
+            <Offcanvas.Title>Pick teams to add to the calendar</Offcanvas.Title>
+            <DropdownButton id="selectLeagueDD" title="Select League">
+              <Dropdown.Item onClick={handleLeagueClick}>MLB</Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick}>NBA</Dropdown.Item>
+              <Dropdown.Item disabled onClick={handleLeagueClick}>
+                NCAA Football
+              </Dropdown.Item>
+              <Dropdown.Item disabled onClick={handleLeagueClick}>
+                NCAA Basketball
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick}>NFL</Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick}>NHL</Dropdown.Item>
+            </DropdownButton>
+          </Stack>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <DropdownButton
-            className="mb-3"
-            id="selectLeagueDD"
-            title="Select League"
-          >
-            <Dropdown.Item onClick={handleLeagueClick}>MLB</Dropdown.Item>
-            <Dropdown.Item onClick={handleLeagueClick}>NBA</Dropdown.Item>
-            <Dropdown.Item disabled onClick={handleLeagueClick}>
-              NCAA Football
-            </Dropdown.Item>
-            <Dropdown.Item disabled onClick={handleLeagueClick}>
-              NCAA Basketball
-            </Dropdown.Item>
-            <Dropdown.Item onClick={handleLeagueClick}>NFL</Dropdown.Item>
-            <Dropdown.Item onClick={handleLeagueClick}>NHL</Dropdown.Item>
-          </DropdownButton>
           <Form>
             {teamList.map((team) => {
               return (
