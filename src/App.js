@@ -19,7 +19,13 @@ function App() {
   // HELPER FUNCTIONS
   function changeMyTeams(team) {
     team.checked
-      ? setMyTeams((prev) => ({ ...prev, [team.id]: team.value }))
+      ? setMyTeams((prev) => ({
+          ...prev,
+          [team.id]: {
+            league: team.value,
+            ...team.dataset,
+          },
+        }))
       : setMyTeams((current) => {
           const copy = { ...current };
           delete copy[team.id];

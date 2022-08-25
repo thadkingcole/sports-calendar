@@ -20,9 +20,9 @@ function TeamPicker({ changeMyTeams, myTeams }) {
   const handleCheck = (e) => changeMyTeams(e.target);
 
   // HELPER FUNCTIONS
-  async function showTeams(selectedLeague) {
-    setLeague(selectedLeague);
-    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[selectedLeague]}/${selectedLeague}/teams`;
+  async function showTeams(league) {
+    setLeague(league);
+    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[league]}/${league}/teams`;
     const res = await fetch(url);
     const data = await res.json();
     const { teams } = data.sports[0].leagues[0];
@@ -66,6 +66,9 @@ function TeamPicker({ changeMyTeams, myTeams }) {
                     checked={Boolean(myTeams[team.team.uid])}
                     onChange={handleCheck}
                     id={team.team.uid}
+                    data-sport={LEAGUES[league]}
+                    data-name={team.team.displayName}
+                    data-color={team.team.color}
                     value={league}
                   ></Form.Check.Input>
                   <Form.Check.Label>
