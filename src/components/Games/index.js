@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Cal from "./Cal";
+import List from "./List";
 
 function Games({ myTeams, view }) {
   // STATE VARIABLES
@@ -63,36 +65,20 @@ function Games({ myTeams, view }) {
     });
   }
 
+  function UserView() {
+    switch (view) {
+      case "List":
+        return <List myGames={myGames} myTeams={myTeams} />;
+      case "Calendar":
+        return <Cal />;
+      default:
+        return <div>Select a view above</div>;
+    }
+  }
+
   return (
     <Container>
-      <Row>
-        <Col>Date</Col>
-        <Col>Game</Col>
-        <Col>Away</Col>
-        <Col>Home</Col>
-        <Col>Status</Col>
-      </Row>
-      {Object.entries(myGames)
-        .sort(([_, a], [__, b]) => a.date - b.date)
-        .map(([id, game]) => {
-          return (
-            Object.keys(myTeams).includes(game.myTeamId) && (
-              <Row
-                key={id}
-                className="text-white"
-                style={{
-                  backgroundColor: `#${myTeams[game.myTeamId].color}`,
-                }}
-              >
-                <Col>{game.date.toDateString()}</Col>
-                <Col>{game.teams}</Col>
-                <Col>{game.awayScore} </Col>
-                <Col>{game.homeScore}</Col>
-                <Col>{game.status}</Col>
-              </Row>
-            )
-          );
-        })}
+      <UserView></UserView>
     </Container>
   );
 }
