@@ -1,19 +1,22 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Stack from "react-bootstrap/Stack";
 import LEAGUES from "../../constants";
 
-function TeamPicker({ changeMyTeams, myTeams }) {
+function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
   // STATE VARIABLES
   const [showCanvas, setShowCanvas] = useState(false);
   const [league, setLeague] = useState("");
   const [teamList, setTeamList] = useState([]);
 
   // HANDLER FUNCTIONS
+  const handleNavClick = (e) => setView(e.target.text);
   const handleShowCanvas = () => setShowCanvas(true);
   const handleCloseCanvas = () => setShowCanvas(false);
   const handleLeagueClick = (e) => showTeams(e.target.text.toLowerCase());
@@ -30,10 +33,27 @@ function TeamPicker({ changeMyTeams, myTeams }) {
   }
 
   return (
-    <div className="bg-secondary">
-      <Button variant="primary" onClick={handleShowCanvas}>
-        Pick Teams
-      </Button>
+    <>
+      <Navbar bg="primary" variant="dark" sticky="top">
+        <Container>
+          <Navbar.Brand
+            style={{ cursor: "pointer" }}
+            variant="primary"
+            onClick={handleShowCanvas}
+          >
+            Pick Teams
+          </Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link onClick={handleNavClick} active={view === "Calendar"}>
+              Calendar
+            </Nav.Link>
+            <Nav.Link onClick={handleNavClick} active={view === "List"}>
+              List
+            </Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
+
       <Offcanvas
         className="text-bg-dark"
         show={showCanvas}
@@ -86,7 +106,7 @@ function TeamPicker({ changeMyTeams, myTeams }) {
           </Form>
         </Offcanvas.Body>
       </Offcanvas>
-    </div>
+    </>
   );
 }
 

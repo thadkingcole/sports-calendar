@@ -9,12 +9,17 @@ function App() {
     // init w/ localStorage OR empty object
     () => JSON.parse(localStorage.getItem("myTeams")) || {}
   );
+  const [view, setView] = useState(
+    // init from localStorage, default calendar
+    () => localStorage.getItem("view") || "Calendar"
+  );
 
   // HOOKS
   useEffect(() => {
     // update localStorage with each change to myTeams
     localStorage.setItem("myTeams", JSON.stringify(myTeams));
   }, [myTeams]);
+  useEffect(() => localStorage.setItem("view", view), [view]);
 
   // HELPER FUNCTIONS
   function changeMyTeams(team) {
@@ -36,8 +41,13 @@ function App() {
   return (
     <div className="App">
       <Top />
-      <TeamPicker changeMyTeams={changeMyTeams} myTeams={myTeams} />
-      <Games myTeams={myTeams} />
+      <TeamPicker
+        myTeams={myTeams}
+        changeMyTeams={changeMyTeams}
+        view={view}
+        setView={setView}
+      />
+      <Games myTeams={myTeams} view={view}/>
     </div>
   );
 }
