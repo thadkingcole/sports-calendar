@@ -54,6 +54,7 @@ function Games({ myTeams, view }) {
         [game.uid]: {
           date: new Date(game.date),
           teams: game.name,
+          short: game.shortName,
           status: status.type.shortDetail,
           awayScore: lp && lp.awayScore,
           homeScore: lp && lp.homeScore,
@@ -65,10 +66,10 @@ function Games({ myTeams, view }) {
 
   function UserView() {
     switch (view) {
+      case "Calendar":
+        return <Cal myGames={myGames} myTeams={myTeams} />;
       case "List":
         return <List myGames={myGames} myTeams={myTeams} />;
-      case "Calendar":
-        return <Cal />;
       default:
         return <div>Select a view above</div>;
     }

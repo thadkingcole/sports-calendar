@@ -1,27 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 
 const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
-function Cal() {
+function Cal({ myGames, myTeams }) {
+  // STATE VARIABLES
   const [day, setDay] = useState(new Date());
   const [firstDay, setFirstDay] = useState(
-    new Date(day.getFullYear(), day.getMonth(), 1)
+    new Date(day.getFullYear(), day.getMonth(), 1).getDay()
   );
+  const [monthRange, setMonthRange] = useState([
+    new Date(day.getFullYear(), day.getMonth(), 1 - firstDay),
+    new Date(day.getFullYear(), day.getMonth(), 1 - day.getDay() + 42),
+  ]);
+  const [visibleGames, setVisibleGames] = useState(
+    Object.values(myGames).filter(
+      (game) => game.date >= monthRange[0] && game.date <= monthRange[1]
+    )
+  );
+
+  // EFFECTS
+  // new firstDay each time the selected month changes
+  useEffect(() => {
+    setFirstDay(new Date(day.getFullYear(), day.getMonth(), 1).getDay());
+  }, [day]);
+  useEffect(() => {
+    setMonthRange([
+      new Date(day.getFullYear(), day.getMonth(), 1 - firstDay),
+      new Date(day.getFullYear(), day.getMonth(), 1 - day.getDay() + 42),
+    ]);
+  }, [day, firstDay]);
+  // on load, filter games for selected month
+  useEffect(() => {
+    setVisibleGames(
+      Object.values(myGames).filter(
+        (game) => game.date >= monthRange[0] && game.date <= monthRange[1]
+      )
+    );
+  }, [day, monthRange, myGames]);
+
+  // HANDLER FUNCTIONS
+  const handleClick = (e) => changeMonth(e.target.textContent);
+
+  // HELPER FUNCTIONS
+  function changeMonth(change) {
+    switch (change) {
+      case "<<":
+        // back 1 year
+        setDay(new Date(day.getFullYear() - 1, day.getMonth()));
+        break;
+      case "<":
+        // back 1 month
+        setDay(new Date(day.getFullYear(), day.getMonth() - 1));
+        break;
+      case ">":
+        // forward 1 month
+        setDay(new Date(day.getFullYear(), day.getMonth() + 1));
+        break;
+      case ">>":
+        // forward 1 year
+        setDay(new Date(day.getFullYear() + 1, day.getMonth()));
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function sameDay(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+
   return (
     <Table bordered variant="dark" className="text-center">
       <thead>
         <tr>
-          <th>{"<<"}</th>
-          <th>{"<"}</th>
+          <th onClick={handleClick}>{"<<"}</th>
+          <th onClick={handleClick}>{"<"}</th>
           <th colSpan={3}>
             {day.toLocaleDateString(undefined, {
               month: "long",
               year: "numeric",
             })}
           </th>
-          <th>{">"}</th>
-          <th>{">>"}</th>
+          <th onClick={handleClick}>{">"}</th>
+          <th onClick={handleClick}>{">>"}</th>
         </tr>
         <tr>
           {daysOfTheWeek.map((day) => (
@@ -32,15 +99,41 @@ function Cal() {
         </tr>
       </thead>
       <tbody>
-        {Array.from({ length: 5 }).map((row, i) => (
+        {Array.from({ length: 6 }).map((row, i) => (
           <tr key={`weekNo${i}`}>
             {Array.from({ length: 7 }).map((col, j) => {
               const newDay = new Date(
-                firstDay.getFullYear(),
-                firstDay.getMonth(),
-                firstDay.getDate() - firstDay.getDay() + j + 7 * i
+                day.getFullYear(),
+                day.getMonth(),
+                1 - firstDay + j + 7 * i
               );
-              return <td key={newDay}>{newDay.getDate()}</td>;
+              return (
+                <td
+                  key={newDay}
+                  className={
+                    newDay.getMonth() === day.getMonth() ? "" : "text-secondary"
+                  }
+                >
+                  {newDay.getDate()}
+                  {visibleGames
+                    .filter((game) => sameDay(game.date, newDay))
+                    .sort((a, b) => a.date - b.date)
+                    .map((game) => (
+                      <div
+                        key={game.date + game.myTeamId}
+                        className="text-white"
+                        style={{
+                          backgroundColor: `#${myTeams[game.myTeamId].color}`,
+                        }}
+                      >
+                        {game.date.toLocaleTimeString(undefined, {
+                          timeStyle: "short",
+                        })}{" "}
+                        {game.short}
+                      </div>
+                    ))}
+                </td>
+              );
             })}
           </tr>
         ))}
