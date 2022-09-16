@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
+import "./calendar.css";
 
 const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -123,12 +124,16 @@ function Cal({ myGames, myTeams }) {
                         key={game.date + game.myTeamId}
                         className="text-white"
                         style={{
-                          backgroundColor: `#${myTeams[game.myTeamId].color}`,
+                          backgroundColor: `#${
+                            Object.keys(myTeams).includes(game.myTeamId) &&
+                            myTeams[game.myTeamId].color
+                          }`,
                         }}
                       >
                         {game.date.toLocaleTimeString(undefined, {
                           timeStyle: "short",
-                        })}{" "}
+                        })}
+                        <br />
                         {game.short}
                       </div>
                     ))}

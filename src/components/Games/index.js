@@ -18,7 +18,7 @@ function Games({ myTeams, view }) {
     );
     // then get a list of games for each team
     Object.keys(myTeams).forEach((id) => {
-      // url to be colled for the team
+      // url to be called for the team
       const url = `http://sports.core.api.espn.com/v2/sports/${
         myTeams[id].sport
       }/leagues/${myTeams[id].league}/seasons/2022/teams/${id
@@ -31,23 +31,23 @@ function Games({ myTeams, view }) {
   // HELPER FUNCTIONS
   async function getGameInfo(teamId, url) {
     // list of events
-    const eventsRes = await fetch(url);
-    const events = await eventsRes.json();
+    const events = await (await fetch(url)).json();
     // list of games
     events.items.forEach(async (event) => {
-      const gameRes = await fetch(event.$ref);
-      const game = await gameRes.json();
+      const game = await (await fetch(event.$ref)).json();
       // game situation
       // TODO getting error from baseball, no situation maybe?
-      // console.log(game.competitions[0])
-      const sitRes = await fetch(game.competitions[0].situation.$ref);
-      const sit = await sitRes.json();
+      console.log(game.competitions[0]);
+      const sit = await (
+        await fetch(game.competitions[0].situation.$ref)
+      ).json();
       // last play (doesn't exist if game hasn't happened yet)
-      const lpRes = sit.lastPlay && (await fetch(sit.lastPlay.$ref));
-      const lp = lpRes && (await lpRes.json());
+      const lp =
+        sit.lastPlay && (await (await fetch(sit.lastPlay.$ref)).json());
       // status
-      const statusRes = await fetch(game.competitions[0].status.$ref);
-      const status = await statusRes.json();
+      const status = await (
+        await fetch(game.competitions[0].status.$ref)
+      ).json();
       // save to state
       setMyGames((prev) => ({
         ...prev,
