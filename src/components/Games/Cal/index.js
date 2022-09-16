@@ -133,8 +133,14 @@ function Cal({ myGames, myTeams }) {
                         }}
                       >
                         <img
-                          src={myTeams[game.myTeamId].logo}
-                          alt={myTeams[game.myTeamId].name}
+                          src={
+                            Object.keys(myTeams).includes(game.myTeamId) &&
+                            myTeams[game.myTeamId].logo
+                          }
+                          alt={
+                            Object.keys(myTeams).includes(game.myTeamId) &&
+                            myTeams[game.myTeamId].name
+                          }
                           width="30"
                           className="float-start"
                         />

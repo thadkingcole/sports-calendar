@@ -1,47 +1,64 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import Table from "react-bootstrap/Table";
+import "./list.css";
 
 function List({ myGames, myTeams }) {
   return (
-    <>
-      <Row>
-        <Col>Date</Col>
-        <Col>Game</Col>
-        <Col>Away</Col>
-        <Col>Home</Col>
-        <Col>Status</Col>
-      </Row>
-      {Object.entries(myGames)
-        .sort(([_, a], [__, b]) => a.date - b.date)
-        .map(([id, game]) => {
-          return (
-            Object.keys(myTeams).includes(game.myTeamId) && (
-              <Row
-                key={id}
-                className="text-white"
-                style={{
-                  backgroundColor: `#${myTeams[game.myTeamId].color}`,
-                }}
-              >
-                <Col>{game.date.toDateString()}</Col>
-                <Col>
-                  <img
-                    src={myTeams[game.myTeamId].logo}
-                    alt={myTeams[game.myTeamId].name}
-                    width="25"
-                    className="me-2"
-                  />
-                  {game.teams}
-                </Col>
-                <Col>{game.awayScore} </Col>
-                <Col>{game.homeScore}</Col>
-                <Col>{game.status}</Col>
-              </Row>
-            )
-          );
-        })}
-    </>
+    <Table size="sm" className="text-center">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th colSpan={3}>Game</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(myGames)
+          .sort(([_, a], [__, b]) => a.date - b.date)
+          .map(([id, game]) => {
+            return (
+              Object.keys(myTeams).includes(game.myTeamId) && (
+                <tr
+                  key={id}
+                  className="text-white"
+                  style={{
+                    backgroundColor: `#${myTeams[game.myTeamId].color}`,
+                  }}
+                >
+                  <td>
+                    <img
+                      src={myTeams[game.myTeamId].logo}
+                      alt={myTeams[game.myTeamId].name}
+                      width="45"
+                      className="float-start"
+                    />
+                    {game.date.toLocaleString(undefined, {
+                      dateStyle: "full",
+                      timeStyle: "short",
+                    })}
+                  </td>
+                  <td>
+                    {game.teams.split(" at ")[0]}
+                    <br />
+                    {game.awayScore}
+                  </td>
+                  <td>at</td>
+                  <td>
+                    {game.teams.split(" at ")[1]}
+                    <br />
+                    {game.homeScore}
+                  </td>
+                  <td>
+                    {(game.status.includes("Final") ||
+                      game.status.includes("Postponed")) &&
+                      game.status}
+                  </td>
+                </tr>
+              )
+            );
+          })}
+      </tbody>
+    </Table>
   );
 }
 
