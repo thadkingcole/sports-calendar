@@ -25,6 +25,7 @@ function Cal({ myGames, myTeams }) {
   useEffect(() => {
     setFirstDay(new Date(day.getFullYear(), day.getMonth(), 1).getDay());
   }, [day]);
+  // change month range as month changes
   useEffect(() => {
     setMonthRange([
       new Date(day.getFullYear(), day.getMonth(), 1 - firstDay),
@@ -42,6 +43,12 @@ function Cal({ myGames, myTeams }) {
 
   // HANDLER FUNCTIONS
   const handleClick = (e) => changeMonth(e.target.textContent);
+  const calendarStyle = (calDay) => {
+    let cn = "";
+    calDay.getMonth() === day.getMonth() || (cn += "text-secondary");
+    sameDay(calDay, new Date()) && (cn += " bg-primary");
+    return cn;
+  };
 
   // HELPER FUNCTIONS
   function changeMonth(change) {
@@ -109,12 +116,7 @@ function Cal({ myGames, myTeams }) {
                 1 - firstDay + j + 7 * i
               );
               return (
-                <td
-                  key={newDay}
-                  className={
-                    newDay.getMonth() === day.getMonth() ? "" : "text-secondary"
-                  }
-                >
+                <td key={newDay} className={calendarStyle(newDay)}>
                   {newDay.getDate()}
                   {visibleGames
                     .filter((game) => sameDay(game.date, newDay))
@@ -130,11 +132,18 @@ function Cal({ myGames, myTeams }) {
                           }`,
                         }}
                       >
-                        {game.date.toLocaleTimeString(undefined, {
-                          timeStyle: "short",
-                        })}
-                        <br />
-                        {game.short}
+                        <img
+                          src={myTeams[game.myTeamId].logo}
+                          alt={myTeams[game.myTeamId].name}
+                          width="30"
+                          className="float-start"
+                        />
+                        <div>
+                          {game.date.toLocaleTimeString(undefined, {
+                            timeStyle: "short",
+                          })}
+                        </div>
+                        <div>{game.short}</div>
                       </div>
                     ))}
                 </td>

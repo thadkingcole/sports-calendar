@@ -88,6 +88,7 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
                     data-sport={LEAGUES[league]}
                     data-name={team.team.displayName}
                     data-color={team.team.color}
+                    data-logo={team.team.logos[0].href}
                     value={league}
                   ></Form.Check.Input>
                   <Form.Check.Label>

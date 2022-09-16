@@ -25,7 +25,15 @@ function List({ myGames, myTeams }) {
                 }}
               >
                 <Col>{game.date.toDateString()}</Col>
-                <Col>{game.teams}</Col>
+                <Col>
+                  <img
+                    src={myTeams[game.myTeamId].logo}
+                    alt={myTeams[game.myTeamId].name}
+                    width="25"
+                    className="me-2"
+                  />
+                  {game.teams}
+                </Col>
                 <Col>{game.awayScore} </Col>
                 <Col>{game.homeScore}</Col>
                 <Col>{game.status}</Col>

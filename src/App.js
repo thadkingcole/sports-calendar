@@ -15,10 +15,11 @@ function App() {
   );
 
   // HOOKS
-  useEffect(() => {
-    // update localStorage with each change to myTeams
-    localStorage.setItem("myTeams", JSON.stringify(myTeams));
-  }, [myTeams]);
+  useEffect(
+    // update local storage with each change to myTeams
+    () => localStorage.setItem("myTeams", JSON.stringify(myTeams)),
+    [myTeams]
+  );
   useEffect(() => localStorage.setItem("view", view), [view]);
 
   // HELPER FUNCTIONS
@@ -47,7 +48,7 @@ function App() {
         view={view}
         setView={setView}
       />
-      <Games myTeams={myTeams} view={view}/>
+      <Games myTeams={myTeams} view={view} />
     </div>
   );
 }

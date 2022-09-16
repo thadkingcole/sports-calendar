@@ -35,16 +35,14 @@ function Games({ myTeams, view }) {
     // list of games
     events.items.forEach(async (event) => {
       const game = await (await fetch(event.$ref)).json();
-      // game situation
-      // TODO getting error from baseball, no situation maybe?
-      console.log(game.competitions[0]);
-      const sit = await (
-        await fetch(game.competitions[0].situation.$ref)
+      // game score
+      const homeScore = await (
+        await fetch(game.competitions[0].competitors[0].score.$ref)
       ).json();
-      // last play (doesn't exist if game hasn't happened yet)
-      const lp =
-        sit.lastPlay && (await (await fetch(sit.lastPlay.$ref)).json());
-      // status
+      const awayScore = await (
+        await fetch(game.competitions[0].competitors[1].score.$ref)
+      ).json();
+      // final vs in progress vs future
       const status = await (
         await fetch(game.competitions[0].status.$ref)
       ).json();
@@ -56,8 +54,8 @@ function Games({ myTeams, view }) {
           teams: game.name,
           short: game.shortName,
           status: status.type.shortDetail,
-          awayScore: lp && lp.awayScore,
-          homeScore: lp && lp.homeScore,
+          awayScore: awayScore.value,
+          homeScore: homeScore.value,
           myTeamId: teamId,
         },
       }));
