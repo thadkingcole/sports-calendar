@@ -17,14 +17,17 @@ function Games({ myTeams, view }) {
       )
     );
     // then get a list of games for each team
-    Object.keys(myTeams).forEach((id) => {
-      // url to be called for the team
-      const url = `http://sports.core.api.espn.com/v2/sports/${
-        myTeams[id].sport
-      }/leagues/${myTeams[id].league}/seasons/2022/teams/${id
-        .split("t:")
-        .pop()}/events?limit=200`;
-      getGameInfo(id, url);
+    Object.keys(myTeams).forEach(async (id) => {
+      // url to be called for the team for current season
+      const url = await (
+        await fetch(
+          `http://sports.core.api.espn.com/v2/sports/${
+            myTeams[id].sport
+          }/leagues/${myTeams[id].league}/teams/${id.split("t:").pop()}`
+        )
+      ).json();
+
+      getGameInfo(id, url.events.$ref + "&limit=200");
     });
   }, [myTeams]);
 
