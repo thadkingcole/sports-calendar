@@ -89,7 +89,7 @@ function Cal({ myGames, myTeams }) {
           <th onClick={handleClick}>
             <Button variant="secondary">{"<"}</Button>
           </th>
-          <th colSpan={3}>
+          <th colSpan={3} className="fs-4">
             {day.toLocaleDateString(undefined, {
               month: "long",
               year: "numeric",
