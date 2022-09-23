@@ -122,11 +122,15 @@ function Cal({ myGames, myTeams }) {
               return (
                 <td
                   key={newDay}
-                  className={sameDay(newDay, new Date()) && "bg-primary"}
+                  className={
+                    sameDay(newDay, new Date()) ? "bg-primary" : undefined
+                  }
                 >
                   <div
                     className={
-                      newDay.getMonth() === day.getMonth() || "text-secondary"
+                      newDay.getMonth() === day.getMonth()
+                        ? undefined
+                        : "text-secondary"
                     }
                   >
                     {newDay.getDate()}
@@ -152,12 +156,14 @@ function Cal({ myGames, myTeams }) {
                       >
                         <img
                           src={
-                            Object.keys(myTeams).includes(game.myTeamId) &&
-                            myTeams[game.myTeamId].logo
+                            Object.keys(myTeams).includes(game.myTeamId)
+                              ? myTeams[game.myTeamId].logo
+                              : undefined
                           }
                           alt={
-                            Object.keys(myTeams).includes(game.myTeamId) &&
-                            myTeams[game.myTeamId].name
+                            Object.keys(myTeams).includes(game.myTeamId)
+                              ? myTeams[game.myTeamId].name
+                              : undefined
                           }
                           width="30"
                           className="float-start"
