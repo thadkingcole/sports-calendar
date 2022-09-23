@@ -13,19 +13,23 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
   // STATE VARIABLES
   const [showCanvas, setShowCanvas] = useState(false);
   const [league, setLeague] = useState("");
+  const [leagueHead, setLeagueHead] = useState("");
   const [teamList, setTeamList] = useState([]);
 
   // HANDLER FUNCTIONS
   const handleNavClick = (e) => setView(e.target.text);
   const handleShowCanvas = () => setShowCanvas(true);
   const handleCloseCanvas = () => setShowCanvas(false);
-  const handleLeagueClick = (e) => showTeams(e.target.name);
+  const handleLeagueClick = (e) => showTeams(e.target);
   const handleCheck = (e) => changeMyTeams(e.target);
 
   // HELPER FUNCTIONS
   async function showTeams(league) {
-    setLeague(league);
-    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[league]}/${league}/teams?limit=999`;
+    setLeague(league.name);
+    setLeagueHead(league.text);
+    const url = `http://site.api.espn.com/apis/site/v2/sports/${
+      LEAGUES[league.name]
+    }/${league.name}/teams?limit=999`;
     const data = await (await fetch(url)).json();
     const { teams } = data.sports[0].leagues[0];
     setTeamList(teams);
@@ -91,6 +95,7 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
           </Stack>
         </Offcanvas.Header>
         <Offcanvas.Body>
+          <h2 className="ms-4">{leagueHead}</h2>
           <Form>
             {teamList.map((team) => {
               return (
