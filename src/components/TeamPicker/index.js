@@ -74,13 +74,13 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
               >
                 NCAA Football
               </Dropdown.Item>
-              <Dropdown.Item
+              {/* <Dropdown.Item
                 onClick={handleLeagueClick}
                 name="mens-college-basketball"
                 disabled
               >
                 NCAA Basketball (coming soon!)
-              </Dropdown.Item>
+              </Dropdown.Item> */}
               <Dropdown.Item onClick={handleLeagueClick} name="nfl">
                 NFL
               </Dropdown.Item>
