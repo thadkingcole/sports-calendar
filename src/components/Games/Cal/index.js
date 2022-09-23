@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import "./calendar.css";
+import { getTextColor } from "../../../tools/textColor";
 
 const daysOfTheWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -43,12 +45,6 @@ function Cal({ myGames, myTeams }) {
 
   // HANDLER FUNCTIONS
   const handleClick = (e) => changeMonth(e.target.textContent);
-  const calendarStyle = (calDay) => {
-    let cn = "";
-    calDay.getMonth() === day.getMonth() || (cn += "text-secondary");
-    sameDay(calDay, new Date()) && (cn += " bg-primary");
-    return cn;
-  };
 
   // HELPER FUNCTIONS
   function changeMonth(change) {
@@ -84,19 +80,27 @@ function Cal({ myGames, myTeams }) {
   }
 
   return (
-    <Table bordered variant="dark" className="text-center">
+    <Table id="cal" bordered variant="dark" className="text-center" size="sm">
       <thead>
         <tr>
-          <th onClick={handleClick}>{"<<"}</th>
-          <th onClick={handleClick}>{"<"}</th>
+          <th onClick={handleClick}>
+            <Button variant="secondary">{"<<"}</Button>
+          </th>
+          <th onClick={handleClick}>
+            <Button variant="secondary">{"<"}</Button>
+          </th>
           <th colSpan={3}>
             {day.toLocaleDateString(undefined, {
               month: "long",
               year: "numeric",
             })}
           </th>
-          <th onClick={handleClick}>{">"}</th>
-          <th onClick={handleClick}>{">>"}</th>
+          <th onClick={handleClick}>
+            <Button variant="secondary">{">"}</Button>
+          </th>
+          <th onClick={handleClick}>
+            <Button variant="secondary">{">>"}</Button>
+          </th>
         </tr>
         <tr>
           {daysOfTheWeek.map((day) => (
@@ -116,20 +120,34 @@ function Cal({ myGames, myTeams }) {
                 1 - firstDay + j + 7 * i
               );
               return (
-                <td key={newDay} className={calendarStyle(newDay)}>
-                  {newDay.getDate()}
+                <td
+                  key={newDay}
+                  className={sameDay(newDay, new Date()) && "bg-primary"}
+                >
+                  <div
+                    className={
+                      newDay.getMonth() === day.getMonth() || "text-secondary"
+                    }
+                  >
+                    {newDay.getDate()}
+                  </div>
                   {visibleGames
                     .filter((game) => sameDay(game.date, newDay))
                     .sort((a, b) => a.date - b.date)
                     .map((game) => (
                       <div
                         key={game.date + game.myTeamId}
-                        className="text-white"
                         style={{
                           backgroundColor: `#${
                             Object.keys(myTeams).includes(game.myTeamId) &&
                             myTeams[game.myTeamId].color
                           }`,
+                          color: getTextColor(
+                            `#${
+                              Object.keys(myTeams).includes(game.myTeamId) &&
+                              myTeams[game.myTeamId].color
+                            }`
+                          ),
                         }}
                       >
                         <img

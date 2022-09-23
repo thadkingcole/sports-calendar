@@ -3,8 +3,8 @@ const LEAGUES = {
   nba: "basketball",
   nfl: "football",
   nhl: "hockey",
-  "ncaa football": "college-football",
-  "ncaa basketball": "college-basketball",
+  "college-football": "football",
+  "mens-college-basketball": "basketball",
 };
 
 export default LEAGUES;

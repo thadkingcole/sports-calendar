@@ -7,7 +7,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Stack from "react-bootstrap/Stack";
-import LEAGUES from "../../constants";
+import LEAGUES from "../../tools/constants";
 
 function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
   // STATE VARIABLES
@@ -19,13 +19,13 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
   const handleNavClick = (e) => setView(e.target.text);
   const handleShowCanvas = () => setShowCanvas(true);
   const handleCloseCanvas = () => setShowCanvas(false);
-  const handleLeagueClick = (e) => showTeams(e.target.text.toLowerCase());
+  const handleLeagueClick = (e) => showTeams(e.target.name);
   const handleCheck = (e) => changeMyTeams(e.target);
 
   // HELPER FUNCTIONS
   async function showTeams(league) {
     setLeague(league);
-    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[league]}/${league}/teams`;
+    const url = `http://site.api.espn.com/apis/site/v2/sports/${LEAGUES[league]}/${league}/teams?limit=999`;
     const data = await (await fetch(url)).json();
     const { teams } = data.sports[0].leagues[0];
     setTeamList(teams);
@@ -62,16 +62,31 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
           <Stack gap={2}>
             <Offcanvas.Title>Pick teams to add to the calendar</Offcanvas.Title>
             <DropdownButton id="selectLeagueDD" title="Select League">
-              <Dropdown.Item onClick={handleLeagueClick}>MLB</Dropdown.Item>
-              <Dropdown.Item onClick={handleLeagueClick}>NBA</Dropdown.Item>
-              <Dropdown.Item disabled onClick={handleLeagueClick}>
+              <Dropdown.Item onClick={handleLeagueClick} name="mlb">
+                MLB
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick} name="nba">
+                NBA
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={handleLeagueClick}
+                name="college-football"
+              >
                 NCAA Football
               </Dropdown.Item>
-              <Dropdown.Item disabled onClick={handleLeagueClick}>
-                NCAA Basketball
+              <Dropdown.Item
+                onClick={handleLeagueClick}
+                name="mens-college-basketball"
+                disabled
+              >
+                NCAA Basketball (coming soon!)
               </Dropdown.Item>
-              <Dropdown.Item onClick={handleLeagueClick}>NFL</Dropdown.Item>
-              <Dropdown.Item onClick={handleLeagueClick}>NHL</Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick} name="nfl">
+                NFL
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleLeagueClick} name="nhl">
+                NHL
+              </Dropdown.Item>
             </DropdownButton>
           </Stack>
         </Offcanvas.Header>
@@ -88,12 +103,20 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
                     data-sport={LEAGUES[league]}
                     data-name={team.team.displayName}
                     data-color={team.team.color}
-                    data-logo={team.team.logos[0].href}
+                    data-logo={
+                      team.team.logos.length
+                        ? team.team.logos[0].href
+                        : "https://via.placeholder.com/100?text=?"
+                    }
                     value={league}
                   ></Form.Check.Input>
                   <Form.Check.Label>
                     <img
-                      src={team.team.logos[0].href}
+                      src={
+                        team.team.logos.length
+                          ? team.team.logos[0].href
+                          : "https://via.placeholder.com/100?text=?"
+                      }
                       alt={team.team.displayName}
                       width="25"
                       className="me-2"

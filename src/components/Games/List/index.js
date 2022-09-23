@@ -1,14 +1,16 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import "./list.css";
+import "../../../tools/textColor";
+import { getTextColor } from "../../../tools/textColor";
 
 function List({ myGames, myTeams }) {
   return (
-    <Table size="sm" className="text-center">
-      <thead>
+    <Table id="list" size="sm" className="text-center">
+      <thead className="bg-dark text-light">
         <tr>
           <th>Date</th>
-          <th colSpan={3}>Game</th>
+          <th>Game</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -20,9 +22,9 @@ function List({ myGames, myTeams }) {
               Object.keys(myTeams).includes(game.myTeamId) && (
                 <tr
                   key={id}
-                  className="text-white"
                   style={{
                     backgroundColor: `#${myTeams[game.myTeamId].color}`,
+                    color: getTextColor(`#${myTeams[game.myTeamId].color}`),
                   }}
                 >
                   <td>
@@ -39,13 +41,11 @@ function List({ myGames, myTeams }) {
                   </td>
                   <td>
                     {game.teams.split(" at ")[0]}
-                    <br />
+                    {": "}
                     {game.awayScore}
-                  </td>
-                  <td>at</td>
-                  <td>
+                    {" @ "}
                     {game.teams.split(" at ")[1]}
-                    <br />
+                    {": "}
                     {game.homeScore}
                   </td>
                   <td>
