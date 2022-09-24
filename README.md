@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# Sports Calendar
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### Video Demo: <URL HERE>
 
-## Available Scripts
+#### Description:
 
-In the project directory, you can run:
+As an avid sports fan of many teams across several leagues, I find it difficult to keep track of when my teams are playing their games. Many sports websites exist that have that information, but they also have a lot of other information that I do not care about such as betting odds, fantasy stats, news articles, and advertisements. Their sites are often well designed and run efficiently, but I still have to click through several pages to look at the schedules of each team I follow. For my project, I chose to create a single page website that complies my favorite teams’ schedules together into one convenient view. Since I wanted the site to work as a single page web app, I decided to use [React](https://reactjs.org) which is a JavaScript framework originally developed by Facebook. I also utilized some ESPN API endpoints to get a list of teams and their schedules.
 
-### `npm start`
+## Usage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+When the user first loads the page, they are greeted by an empty calendar. The user can pick their favorite teams by clicking `Pick Teams` at the top left of the page.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![how to pick your teams](./screenshots/pickTeams.png)
 
-### `npm test`
+This brings up a menu where the user can select each team from each of the available leagues:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- MLB
+- NBA
+- NCAA Football
+- NFL
+- NHL
 
-### `npm run build`
+![how to select the desired league](./screenshots/selectLeague.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Once the user clicks on the desired league, a list of teams in that league is displayed along with a checkbox for each team. Clicking on the checkbox adds the team to the user’s calendar.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![adding teams to the calendar](./screenshots/chiefsCheckmark.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The user can select and deselect as many teams as desired across any combination of supported leagues. Once the user is done with their selections, each selected teams’ games will be shown on the calendar view.
 
-### `npm run eject`
+![calendar view](./screenshots/fullCalendar.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The user can change months by clicking the `<` and `>` buttons and can change years by clicking the `<<` and `>>` buttons.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Users can also select a list view of their teams’ games by clicking `List` in the top-left part of the page. This view gives the user a chronological list of their teams’ games including the score of the game and whether the game is in progress or has gone final.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![list view](./screenshots/listView.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Users only have to select their favorite teams once as that data is saved to the browser’s [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). This way, the browser remembers which teams are their favorite and will load their schedules the next time they visit this app.
 
-## Learn More
+**NOTE:** User data is not saved to any external source, only on the user's own device. This is nice for privacy, but it also means that favorite teams are not remembered when visiting this app on different devices or on different browsers. This funcationality could be added in the future, but for now it is considered to be a feature and not a bug.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+That is about all there is to the app. What follows is more details on the development of the app and what each file does.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Style Decisions
 
-### Code Splitting
+During development, a list view was created since it was much simpler to develop than a calendar view. This allowed me to display game data on the page much quicker than it would have taken with the calendar view, and this helped greatly with debugging how games were being fetched from the ESPN API. In fact, the list view was so convenient that I almost did not create the calendar view as I thought it may be too difficult to develop. In the end, the calendar view ended up not being as challenging as I initially thought, and since I also liked the list view, I decided to give the user the option of using either view they prefer.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+I also debated how I was going to present the list/calendar of games to the user in a way that the user would easily know which team is playing in which game. Ultimately, I decided to use the team’s primary color as a background for the game information involving that team (e.g. using orange for each University of Tennessee football game). The primary color was available in the ESPN API data as a hex code. From there, I used a solution found at https://wunnle.com/dynamic-text-color-based-on-background that calculates whether to use black or white text based on the background color contrast. This solution makes the game information readable no matter what the team’s primary color might be. If Tennessee orange is being used, then black text will work great, and if the Kansas City Chiefs red does not work with black text, it will automatically use white text instead.
 
-### Analyzing the Bundle Size
+![example of dynamic text color based on background color](./screenshots/blackorwhite.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Because I was using several different ESPN API endpoints to get information on many teams across many leagues, the data returned were not always of uniform structure. I believe I have found and corrected many of the inconsistencies using logic or placeholder data, but if you find something not displaying correctly or at all, bugs may be reported to thadcole@duck.com.
 
-### Making a Progressive Web App
+## Files
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The file structure was generated with [create-react-app](https://create-react-app.dev/) using the following command:
 
-### Advanced Configuration
+```
+npx create-react-app
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+From there, unnecessary files were deleted until just the required files remained. I then created additional files as I worked through development until I arrived at the current file structure:
 
-### Deployment
+### Root ~
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This is the beginning of the file tree and contains directories and standalone files as described below.
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- `node_modules/` - This directory is generated by `npm start` and contains the various node modules used by the app as listed in `package.json`.
+- `public/`
+  - `index.html` - the html template used by React.
+  - `favicon.ico` - image used as the icon seen in the browser tab.
+  - `robots.txt` - a text file that gives directions to web-crawling bots on how they can interact wtih this webpage.
+- `screenshots/` - this directory holds the various images used in this README markdown file.
+- `src/` - This directory holds the bulk of the working code for the app.
+  - `components/` - This directory holds the code for each React functional component written for the app.
+    - `Games/` - This component consists of the `Cal` and `List` components.
+      - `Cal/`
+        - `calendar.css` - defines custom style for the calendar view.
+        - `index.js` - defines how the calendar view is displayed on the page with the user selected teams' games.
+      - `List/`
+        - `index.js` - defines how the list view is displayed on the page with the user selected teams' games.
+        - `list.css` - defines custom style for the list view.
+      - `index.js` - passes game data from further up the component tree to the user selected calendar or list view.
+    - `TeamPicker/`
+      - `index.js` - consists of the blue navbar containing the team selection offcanvas. Allows the user to select each desired team from the available leagues by clicking the respective checkboxes.
