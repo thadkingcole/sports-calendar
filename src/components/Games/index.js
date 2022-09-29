@@ -34,20 +34,32 @@ function Games({ myTeams, view }) {
   // HELPER FUNCTIONS
   async function getGameInfo(teamId, url) {
     // list of events
-    const events = await (await fetch(url)).json();
+    const events = await (await fetch(url.replace("http", "https"))).json();
     // list of games
     events.items.forEach(async (event) => {
-      const game = await (await fetch(event.$ref)).json();
+      const game = await (
+        await fetch(event.$ref.replace("http", "https"))
+      ).json();
       // game score
       const homeScore = await (
-        await fetch(game.competitions[0].competitors[0].score.$ref)
+        await fetch(
+          game.competitions[0].competitors[0].score.$ref.replace(
+            "http",
+            "https"
+          )
+        )
       ).json();
       const awayScore = await (
-        await fetch(game.competitions[0].competitors[1].score.$ref)
+        await fetch(
+          game.competitions[0].competitors[1].score.$ref.replace(
+            "http",
+            "https"
+          )
+        )
       ).json();
       // final vs in progress vs future
       const status = await (
-        await fetch(game.competitions[0].status.$ref)
+        await fetch(game.competitions[0].status.$ref.replace("http", "https"))
       ).json();
       // save to state
       setMyGames((prev) => ({
