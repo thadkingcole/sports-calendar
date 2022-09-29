@@ -21,7 +21,7 @@ function Games({ myTeams, view }) {
       // url to be called for the team for current season
       const url = await (
         await fetch(
-          `http://sports.core.api.espn.com/v2/sports/${
+          `https://sports.core.api.espn.com/v2/sports/${
             myTeams[id].sport
           }/leagues/${myTeams[id].league}/teams/${id.split("t:").pop()}`
         )

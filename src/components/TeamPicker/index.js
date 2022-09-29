@@ -27,7 +27,7 @@ function TeamPicker({ myTeams, changeMyTeams, view, setView }) {
   async function showTeams(league) {
     setLeague(league.name);
     setLeagueHead(league.text);
-    const url = `http://site.api.espn.com/apis/site/v2/sports/${
+    const url = `https://site.api.espn.com/apis/site/v2/sports/${
       LEAGUES[league.name]
     }/${league.name}/teams?limit=999`;
     const data = await (await fetch(url)).json();
