@@ -1,6 +1,8 @@
 # Sports Calendar
 
-#### Video Demo: <URL HERE>
+<https://thadkingcole.github.io/sports-calendar>
+
+#### Video Demo: <https://youtu.be/WToJvGRM0f8>
 
 #### Description:
 
