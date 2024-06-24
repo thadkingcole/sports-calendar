@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/sports-calendar/static/css/main.879d5824.css",
-    "main.js": "/sports-calendar/static/js/main.8dc86239.js",
+    "main.css": "/sports-calendar/static/css/main.0c5a794a.css",
+    "main.js": "/sports-calendar/static/js/main.51e77381.js",
     "index.html": "/sports-calendar/index.html",
-    "main.879d5824.css.map": "/sports-calendar/static/css/main.879d5824.css.map",
-    "main.8dc86239.js.map": "/sports-calendar/static/js/main.8dc86239.js.map"
+    "main.0c5a794a.css.map": "/sports-calendar/static/css/main.0c5a794a.css.map",
+    "main.51e77381.js.map": "/sports-calendar/static/js/main.51e77381.js.map"
   },
   "entrypoints": [
-    "static/css/main.879d5824.css",
-    "static/js/main.8dc86239.js"
+    "static/css/main.0c5a794a.css",
+    "static/js/main.51e77381.js"
   ]
 }
